@@ -1,0 +1,232 @@
+
+!
+! Last configuration change at 18:14:19 +0330 Mon Dec 16 2019
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CustA-R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+clock timezone +0330 3 30
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.1.255.1 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 172.16.1.1 255.255.255.0
+ duplex auto
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 172.16.12.1 255.255.255.0
+ duplex auto
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Serial2/0
+ no shutdown
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/1
+ no shutdown
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/2
+ no shutdown
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/3
+ no shutdown
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+router bgp 65001
+ bgp router-id 10.1.255.1
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 10.1.255.2 remote-as 65001
+ neighbor 10.1.255.2 update-source Loopback0
+ neighbor 172.16.1.12 remote-as 20000
+ !
+ address-family ipv4
+  network 10.1.255.1 mask 255.255.255.255
+  network 172.16.1.0 mask 255.255.255.0
+  neighbor 10.1.255.2 activate
+  neighbor 172.16.1.12 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 10.1.255.2 255.255.255.255 Ethernet0/1 172.16.12.2
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ length 26
+ width 133
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+banner exec ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner incoming ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner login ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+end

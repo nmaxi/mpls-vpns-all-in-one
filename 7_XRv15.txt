@@ -1,0 +1,265 @@
+!! IOS XR Configuration 6.1.3
+!! Last configuration change at Mon Dec 16 16:57:23 2019 by nmaxi
+!
+hostname XRv15
+domain lookup disable
+vrf CustA
+ address-family ipv4 unicast
+  import route-target
+   10.255.255.12:1
+  !
+  export route-target
+   10.255.255.15:1
+  !
+ !
+!
+vrf CustD
+ address-family ipv4 unicast
+  import route-target
+   10.255.255.12:4
+   10.255.255.16:24
+  !
+  export route-policy CustD_Export_Policy
+ !
+!
+line console
+ exec-timeout 0 0
+ width 133
+ length 26
+!
+interface Loopback0
+ no shutdown
+ ipv4 address 10.255.255.15 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/0
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/1
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/2
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/3
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/4
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/5
+ no shutdown
+ ipv4 address 10.15.99.15 255.255.255.0
+!
+interface GigabitEthernet0/0/0/6
+ no shutdown
+ vrf CustA
+ ipv4 address 172.16.4.15 255.255.255.0
+!
+interface GigabitEthernet0/0/0/7
+ no shutdown
+ vrf CustA
+ ipv4 address 172.16.3.15 255.255.255.0
+!
+interface GigabitEthernet0/0/0/8
+ no shutdown
+ vrf CustD
+ ipv4 address 172.19.3.15 255.255.255.0
+!
+interface GigabitEthernet0/0/0/9
+ no shutdown
+ vrf CustD
+ ipv4 address 172.19.2.15 255.255.255.0
+!
+interface GigabitEthernet0/0/0/10
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/11
+ no shutdown
+ ipv4 address 10.14.15.15 255.255.255.0
+!
+interface GigabitEthernet0/0/0/12
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/13
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/14
+ no shutdown
+ ipv4 address 10.15.16.15 255.255.255.0
+!
+interface GigabitEthernet0/0/0/15
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/16
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/17
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/18
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/19
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/20
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/21
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/22
+ no shutdown
+ shutdown
+!
+route-policy PASS_ALL_EXTERNAL
+  pass
+end-policy
+!
+route-policy CustD_Export_Policy
+  if destination in (10.4.255.0/24 eq 32) then
+    set extcommunity rt (10.255.255.15:20004) additive
+    pass
+  else
+    set extcommunity rt (10.255.255.15:4) additive
+    pass
+  endif
+end-policy
+!
+router static
+ vrf CustD
+  address-family ipv4 unicast
+   10.4.255.2/32 GigabitEthernet0/0/0/9 172.19.2.2
+   10.4.255.3/32 GigabitEthernet0/0/0/8 172.19.3.3
+  !
+ !
+!
+router isis 20000
+ is-type level-2-only
+ net 47.0020.0000.0000.0015.00
+ address-family ipv4 unicast
+  metric-style wide
+  advertise passive-only
+  segment-routing mpls
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+   prefix-sid index 15
+  !
+ !
+ interface GigabitEthernet0/0/0/5
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/11
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/14
+  address-family ipv4 unicast
+  !
+ !
+!
+router bgp 20000
+ bgp router-id 10.255.255.15
+ address-family vpnv4 unicast
+ !
+ neighbor 10.255.255.11
+  remote-as 20000
+  update-source Loopback0
+  address-family vpnv4 unicast
+  !
+ !
+ neighbor 10.255.255.13
+  remote-as 20000
+  update-source Loopback0
+  address-family vpnv4 unicast
+  !
+ !
+ vrf CustA
+  rd 20000:1
+  address-family ipv4 unicast
+  !
+  neighbor 172.16.3.3
+   remote-as 65001
+   address-family ipv4 unicast
+    route-policy PASS_ALL_EXTERNAL in
+    route-policy PASS_ALL_EXTERNAL out
+    as-override
+   !
+  !
+  neighbor 172.16.4.4
+   remote-as 65001
+   address-family ipv4 unicast
+    route-policy PASS_ALL_EXTERNAL in
+    route-policy PASS_ALL_EXTERNAL out
+    as-override
+   !
+  !
+ !
+ vrf CustD
+  rd 20000:4
+  address-family ipv4 unicast
+   redistribute connected metric 110
+   redistribute static metric 110
+  !
+ !
+!
+mpls label range table 0 150000 159999
+segment-routing
+!
+!
+banner exec ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner incoming ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner login ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+end

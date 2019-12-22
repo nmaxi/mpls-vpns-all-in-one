@@ -1,0 +1,187 @@
+!! IOS XR Configuration 6.1.3
+!! Last configuration change at Sun Dec 15 07:21:52 2019 by nmaxi
+!
+hostname XRv99
+domain lookup disable
+line console
+ exec-timeout 0 0
+ width 133
+ length 26
+!
+interface Loopback0
+ no shutdown
+ ipv4 address 10.255.255.99 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/0
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/1
+ no shutdown
+ ipv4 address 10.11.99.99 255.255.255.0
+!
+interface GigabitEthernet0/0/0/2
+ no shutdown
+ ipv4 address 10.12.99.99 255.255.255.0
+!
+interface GigabitEthernet0/0/0/3
+ no shutdown
+ ipv4 address 10.13.99.99 255.255.255.0
+!
+interface GigabitEthernet0/0/0/4
+ no shutdown
+ ipv4 address 10.14.99.99 255.255.255.0
+!
+interface GigabitEthernet0/0/0/5
+ no shutdown
+ ipv4 address 10.15.99.99 255.255.255.0
+!
+interface GigabitEthernet0/0/0/6
+ no shutdown
+ ipv4 address 10.16.99.99 255.255.255.0
+!
+interface GigabitEthernet0/0/0/7
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/8
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/9
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/10
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/11
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/12
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/13
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/14
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/15
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/16
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/17
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/18
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/19
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/20
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/21
+ no shutdown
+ shutdown
+!
+interface GigabitEthernet0/0/0/22
+ no shutdown
+ shutdown
+!
+router isis 20000
+ is-type level-2-only
+ net 47.0020.0000.0000.0099.00
+ address-family ipv4 unicast
+  metric-style wide
+  advertise passive-only
+  segment-routing mpls
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+   prefix-sid index 99
+  !
+ !
+ interface GigabitEthernet0/0/0/1
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/2
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/3
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/4
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/5
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/6
+  address-family ipv4 unicast
+  !
+ !
+!
+mpls label range table 0 990000 999999
+segment-routing
+!
+!
+banner exec ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner incoming ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner login ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+end

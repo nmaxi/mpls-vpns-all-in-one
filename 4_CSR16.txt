@@ -1,0 +1,509 @@
+!
+! Last configuration change at 17:56:50 UTC Mon Dec 16 2019
+!
+version 17.1
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service call-home
+platform qfp utilization monitor load 80
+platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname CSR16
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition CustB
+ rd 20000:2
+ !
+ address-family ipv4
+  export map CustB_Export_Map
+  route-target import 10.255.255.12:2
+  route-target import 10.255.255.15:20004
+ exit-address-family
+!
+logging console alerts
+!
+no aaa new-model
+call-home
+ ! If contact email address in call-home is configured as sch-smart-licensing@cisco.com
+ ! the email address configured in Cisco Smart License Portal will be used as contact email address to send SCH notifications.
+ contact-email-addr sch-smart-licensing@cisco.com
+ profile "CiscoTAC-1"
+  active
+  destination transport-method http
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+!
+!
+mpls label range 160000 169999
+multilink bundle-name authenticated
+l2vpn evpn
+ replication-type ingress
+ mpls label mode per-ce
+ router-id Loopback0
+!
+l2vpn evpn instance 6 vlan-based
+ rd 20000:6
+!
+l2vpn evpn instance 8 vlan-based
+ rd 20000:8
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-2103731151
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2103731151
+ revocation-check none
+ rsakeypair TP-self-signed-2103731151
+!
+crypto pki trustpoint SLA-TrustPoint
+ enrollment pkcs12
+ revocation-check crl
+!
+!
+diagnostic bootup level minimal
+memory free low-watermark processor 72107
+!
+!
+spanning-tree extend system-id
+!
+!
+redundancy
+bridge-domain 6 
+ member Port-channel6 service-instance 6
+ member evpn-instance 6
+!
+bridge-domain 8 
+ member GigabitEthernet10 service-instance 8
+ member GigabitEthernet11 service-instance 8
+ member evpn-instance 8
+!
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.255.255.16 255.255.255.255
+!
+interface Port-channel6
+ no shutdown
+ no ip address
+ no negotiation auto
+ no mop enabled
+ no mop sysid
+ evpn ethernet-segment 6
+  identifier type 3 system-mac 5000.0004.0008
+  redundancy all-active
+ service instance 6 ethernet
+  encapsulation untagged
+ !
+!
+interface GigabitEthernet1
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet2
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet3
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet4
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet5
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet6
+ no shutdown
+ ip address 10.16.99.16 255.255.255.0
+ ip router isis 20000
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet7
+ no shutdown
+ no ip address
+ negotiation auto
+ no keepalive
+ no mop enabled
+ no mop sysid
+ service instance 7 ethernet
+  encapsulation untagged
+ !
+!
+interface GigabitEthernet8
+ no shutdown
+ vrf forwarding CustB
+ ip address 172.17.3.16 255.255.255.0
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet9
+ no shutdown
+ no ip address
+ negotiation auto
+ no mop enabled
+ no mop sysid
+ isis network point-to-point 
+ isis three-way-handshake cisco
+ channel-group 6
+!
+interface GigabitEthernet10
+ no shutdown
+ no ip address
+ negotiation auto
+ no mop enabled
+ no mop sysid
+ service instance 8 ethernet
+  encapsulation untagged
+ !
+!
+interface GigabitEthernet11
+ no shutdown
+ no ip address
+ negotiation auto
+ no mop enabled
+ no mop sysid
+ service instance 8 ethernet
+  encapsulation untagged
+ !
+!
+interface GigabitEthernet12
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet13
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet14
+ no shutdown
+ ip address 10.15.16.16 255.255.255.0
+ ip router isis 20000
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet15
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet16
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet17
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet18
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet19
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet20
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet21
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet22
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet23
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet24
+ no shutdown
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+!
+segment-routing mpls
+ !
+ connected-prefix-sid-map
+  address-family ipv4
+   10.255.255.16/32 index 16 range 1 
+  exit-address-family
+ !
+!
+router ospf 2 vrf CustB
+ router-id 10.2.255.16
+ domain-id type 0005 value 000000000002
+ redistribute bgp 20000
+ passive-interface default
+ no passive-interface GigabitEthernet8
+ network 172.17.3.0 0.0.0.255 area 0
+!
+router isis 20000
+ net 47.0020.0000.0000.0016.00
+ is-type level-2-only
+ advertise passive-only
+ metric-style wide
+ segment-routing mpls
+ passive-interface Loopback0
+!
+router bgp 20000
+ bgp router-id 10.255.255.16
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 10.255.255.11 remote-as 20000
+ neighbor 10.255.255.11 update-source Loopback0
+ neighbor 10.255.255.13 remote-as 20000
+ neighbor 10.255.255.13 update-source Loopback0
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor 10.255.255.11 activate
+  neighbor 10.255.255.11 send-community extended
+  neighbor 10.255.255.13 activate
+  neighbor 10.255.255.13 send-community extended
+ exit-address-family
+ !
+ address-family l2vpn vpls
+  neighbor 10.255.255.11 activate
+  neighbor 10.255.255.11 send-community extended
+  neighbor 10.255.255.11 suppress-signaling-protocol ldp
+  neighbor 10.255.255.13 activate
+  neighbor 10.255.255.13 send-community extended
+  neighbor 10.255.255.13 suppress-signaling-protocol ldp
+ exit-address-family
+ !
+ address-family l2vpn evpn
+  neighbor 10.255.255.11 activate
+  neighbor 10.255.255.11 send-community both
+  neighbor 10.255.255.13 activate
+  neighbor 10.255.255.13 send-community both
+ exit-address-family
+ !
+ address-family ipv4 vrf CustB
+  redistribute ospf 2 match internal external 1 external 2
+ exit-address-family
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+!
+!
+!
+!
+ip prefix-list CustB_R3_Lo100 seq 5 permit 192.168.2.254/32
+!
+ip prefix-list CustD_Lo0s seq 5 permit 10.4.255.0/24 ge 32
+!
+!
+route-map CustB_Export_Map permit 50 
+ match ip address prefix-list CustB_R3_Lo100
+ set extcommunity rt 10.255.255.16:24
+!
+route-map CustB_Export_Map permit 60 
+ set extcommunity rt 10.255.255.16:2
+!
+l2vpn evpn instance 7 point-to-point
+ rd 20000:7
+ vpws context CustG-VPWS
+  service target 20014 source 20016
+  member GigabitEthernet7 service-instance 7
+ !
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ length 26
+ width 133
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+!
+!
+!
+!
+banner exec ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner incoming ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+banner login ^C
+***********************************************************************************
+* Cisco MPLS VPNs (All-in-One!) EVPN, VPLS, VPWS, L3VPN                           *
+* IGP: IS-IS + Segment-Routing (IOS-XR, IOS-XE)                                   *
+* Copyright (C) 2019  Navid Yahyapour (NMAXi)                                     *
+* This configuration file is free: you can redistribute it and/or modify it.      *
+* This config file is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; Without even the implied warranty of MERCHANTABILITY or FITNESS   *
+* FOR A PARTICULAR PURPOSE. (The same as GNU General Public License!)             * 
+* My LinkedIn profile:  <https://www.linkedin.com/in/navid-yahyapour/>.           *
+***********************************************************************************^C
+end
